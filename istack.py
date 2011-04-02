@@ -11,6 +11,8 @@
 from optparse import OptionParser
 import time
 from subprocess import call, Popen, PIPE
+import sys
+import os
 
 __version__ = "0.1"
 
@@ -23,25 +25,16 @@ parser.add_option("-d", "--dir", dest="dir", default=".",
 parser.add_option("-i", "--interval", dest="interval", type="int", default=60,
                   help="Interval (seconds) between successive thread dumps \
                         (default: 60 seconds)")
-parser.add_option("-n", "--number", dest="number", type="int", default=-1,
+parser.add_option("-n", "--number", dest="number", type="int", default=sys.maxint,
                   help="Number of thread dumps to take \
                         (default: unlimited)")
 parser.add_option("-k", "--keep", dest="number", type="int", default=1440,
                   help="Number of thread dumps to keep \
                         (default: 1440)")
 
-
-# alarm handler
-
-# purge old file
-
-# jstack
-
-# setup dirs
-
-def shell(cmdline):
+def shell(args):
     try:
-        p = call("%s" % cmdline, shell=True, stdout=PIPE, stderr=PIPE)
+        p = call(args, stdout=PIPE, stderr=PIPE)
         return p == 0
     except OSError, e:
         return False
@@ -53,22 +46,27 @@ def validate(options, args):
         exit(1)
 
     # check whether jvm process exists
-    jvm_pid = int(args[0])
-    if not shell("ps -p %d" % jvm_pid):
-        print "Error: jvm process (%d) does not exist" % jvm_pid
+    jvm_pid = args[0]
+    if not shell(["ps", "-p", jvm_pid]):
+        print "Error: jvm process (%s) does not exist" % jvm_pid
         exit(1)
     
     # check whether jstack exists in path
-    if not shell("which jstack"):
+    if not shell(["which", "jstack"]):
         print "Error: jstack executable is not in PATH"
         exit(1)
 
     return jvm_pid
 
-def setup(options, jvm_pid, run_time):
-    pass
+def setup(out_dir):
+    try:
+        os.makedirs(out_dir)
+    except OSError, e:
+        print "Error: creating directory in %s failed" % options.dir
+        print "      ",e
+        exit(1)
 
-def run(options, jvm_pid, run_time):
+def run(options, jvm_pid, out_dir):
     pass
 
 # get time 
@@ -84,7 +82,8 @@ if __name__ == '__main__':
     jvm_pid = validate(options, args)
 
     # setup output directory
-    setup(options, jvm_pid, run_time)
+    out_dir = options.dir + "/" + run_time
+    setup(out_dir)
 
     # run
-    run(options, jvm_pid, run_time)
+    run(options, jvm_pid, out_dir)
