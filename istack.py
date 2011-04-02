@@ -12,6 +12,8 @@ from optparse import OptionParser
 import time
 from subprocess import call, Popen, PIPE
 
+__version__ = "0.1"
+
 # setup command line options
 usage = "usage: %prog [options] jvm-process-id\n       %prog -h for options"
 parser = OptionParser(usage=usage)
@@ -37,9 +39,9 @@ parser.add_option("-k", "--keep", dest="number", type="int", default=1440,
 
 # setup dirs
 
-def shell(program):
+def shell(cmdline):
     try:
-        p = call("%s" % program, shell=True, stdout=PIPE)
+        p = call("%s" % cmdline, shell=True, stdout=PIPE, stderr=PIPE)
         return p == 0
     except OSError, e:
         return False
@@ -53,7 +55,7 @@ def validate(options, args):
     # check whether jvm process exists
     jvm_pid = int(args[0])
     if not shell("ps -p %d" % jvm_pid):
-        print "Error: jvm process with id %d does not exist" % jvm_pid
+        print "Error: jvm process (%d) does not exist" % jvm_pid
         exit(1)
     
     # check whether jstack exists in path
