@@ -9,10 +9,12 @@
 #  Senthil Vaiyapuri - April 2011
 # -------------------------------------------------------------------------------
 from optparse import OptionParser
-import time
 from subprocess import call, Popen, PIPE
+import time
 import sys
 import os
+import signal
+import glob
 
 __version__ = "0.1"
 
@@ -28,7 +30,7 @@ parser.add_option("-i", "--interval", dest="interval", type="int", default=60,
 parser.add_option("-n", "--number", dest="number", type="int", default=sys.maxint,
                   help="Number of thread dumps to take \
                         (default: unlimited)")
-parser.add_option("-k", "--keep", dest="number", type="int", default=1440,
+parser.add_option("-k", "--keep", dest="keep", type="int", default=1440,
                   help="Number of thread dumps to keep \
                         (default: 1440)")
 
@@ -66,12 +68,68 @@ def setup(out_dir):
         print "      ",e
         exit(1)
 
-def run(options, jvm_pid, out_dir):
-    pass
+def get_output(args):
+    p = Popen(args, stdout=PIPE, stderr=PIPE)
+    out, err = p.communicate()
+    return (p.returncode, out, err)
 
-# get time 
+def alarm_handler(signum, frame):
+    print "Error: alarm raised, jstack command timed out (60 seconds), exiting"
+    exit(1)
+
+def manage_dumps(options, out_dir):
+    dumps = glob.glob(out_dir+"/[0-9]*.txt")
+    delete = len(dumps) - options.keep
+    while delete > 0:
+        try:
+            os.remove(out_dir+"/"+dumps[delete-1])
+        except:
+            pass
+        finally:
+            delete -= 1
+
+def run(options, jvm_pid, out_dir):
+    # echo the jvm process command line
+    try:
+        retcode, out, err = get_output(["ps","-o","command","-p", jvm_pid])
+    except:
+        pass
+    else:
+        if retcode == 0:
+            with open(out_dir+"/cmdline.txt","w") as c:
+                c.write(out)
+
+    signal.signal(signal.SIGALRM, alarm_handler)
+
+    # atlast, incessant jstack
+    count = options.number
+    while count > 0:
+        fname = out_dir + "/" + get_time() + ".txt"
+        try:
+            signal.alarm(60)
+            retcode, out, err = get_output(["jstack", jvm_pid])
+            signal.alarm(0)
+        except:
+            print "Error: jstack command failed with exception. exiting"
+            exit(1)
+        else:
+            if retcode != 0:
+                print "Error: jstack command failed. exiting"
+                print "  retcode : ",retcode
+                print "  stdout  : ",out
+                print "  stderr  : ",err
+                exit(1)
+
+            # write out the thread dump
+            with open(fname, "w") as f:
+                f.write(out)
+
+            manage_dumps(options, out_dir)
+            count -= 1
+            time.sleep(options.interval)
+
 def get_time():
-    return time.strftime('%Y%m%d-%H%M')
+    return time.strftime('%Y%m%d-%H%M%S')
 
 if __name__ == '__main__':
     # mark time
