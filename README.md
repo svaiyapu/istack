@@ -74,7 +74,7 @@ Script will exit due to one of the following reasons
 
 Testing
 -------
-* Tested with Python 2.6.1 in Mac OSX 10.6.7
+* Tested with Python 2.6.1, jstack (bundled with JDK 1.6.0_24) in Mac OSX 10.6.7
 
 Feedback/Issues
 ---------------
