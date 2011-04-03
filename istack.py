@@ -82,7 +82,7 @@ def manage_dumps(options, out_dir):
     delete = len(dumps) - options.keep
     while delete > 0:
         try:
-            os.remove(out_dir+"/"+dumps[delete-1])
+            os.remove(dumps[delete-1])
         except:
             pass
         finally:
@@ -126,7 +126,8 @@ def run(options, jvm_pid, out_dir):
 
             manage_dumps(options, out_dir)
             count -= 1
-            time.sleep(options.interval)
+            if count > 0:
+                time.sleep(options.interval)
 
 def get_time():
     return time.strftime('%Y%m%d-%H%M%S')
