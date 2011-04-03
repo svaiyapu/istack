@@ -1,7 +1,7 @@
 Incessant (j)Stack
 ==================
 
-Script to call jstack on a jvm instance incessantly, saves threaddumps in a directory, supports options to specifiy interval between threaddumps, number of threaddumps to take and keep.  
+Script to call _jstack_ on a jvm instance incessantly, saves threaddumps in a directory, supports options to specifiy interval between threaddumps, number of threaddumps to take and keep.  
 
 Usage
 -----
@@ -25,30 +25,28 @@ Options:
 
 Sample Usages
 -------------
-1.  Take thread dumps once every minute, indefinitely, keeping latest 1 day worth of dumps (1440).  This is the default without specifying any options
+*  Take thread dumps once every minute, indefinitely, keeping latest 1 day worth of dumps (1440).  This is the default without specifying any options
 <pre>
     $ python istack.py <jvm-process-id>
 </pre>
 
-2.  Take thread dumps once every 5 munutes, indefinitely, keeping latest 500 dumps
+*  Take thread dumps once every 5 munutes, indefinitely, keeping latest 500 dumps
 <pre>
     $ python istack.py -i 300 -k 500 <jvm-process-id>
 </pre>
 
-3.  Take thread dumps once every 30 seconds for 5 times and save them under dump directory
+*  Take thread dumps once every 30 seconds for 5 times and save them under dump directory
 <pre>
     $ python istack.py -i 30 -n 5 -d dump <jvm-process-id>
 </pre>
 
-
 Thread dumps
 ------------
-
 A directory with YYYYMMDD-hhmm format named with the script invocation time will be created under current directory or under the directory specified with -d option.
 
-Command line of the jvm process which is being jstacked is saved into cmdline.txt file under the above directory
+Command line of the jvm process which is being jstacked  is saved into cmdline.txt file under the above directory
 
-Thread dumps will be saved under the directory with YYYYMMDD-hhmm.txt name formet with jstack invocation time.
+Thread dumps will be saved under the directory with YYYYMMDD-hhmm.txt name formet with _jstack_ invocation time.
 
 For example:
 <pre>
@@ -67,17 +65,16 @@ For example:
 
 Script Exit 
 -----------
-
 Script will exit due to one of the following reasons
-1. Input and environment validation failures
-2. Number of thread dumps as specified by -n option were taken successfully
-3. jstack call encountered an error
-4. jstack call did not return within a 60 second timeout
+1.  Input and environment validation failures
+2.  Number of thread dumps as specified by -n option were taken successfully
+3.  _jstack_ call encountered an error
+4.  _jstack_ call did not return within a 60 second timeout
 
-Misc
-----
+Testing
+-------
 *  Tested with Python 2.6.1 in Mac OSX 10.6.7
 
 Feedback/Issues
 ---------------
-Please use the issue tracker associated with this repository.  Please note that jstack is not available in Windows and Itanium platforms.
+Please use the issue tracker associated with this repository.  Please note that _jstack_ is not available in Windows and Itanium platforms.
