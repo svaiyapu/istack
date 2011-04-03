@@ -40,6 +40,10 @@ Sample Usages
     $ python istack.py -i 30 -n 5 -d dump &lt;jvm-process-id&gt;
 </pre>
 
+Dependency
+----------
+* _jstack_ in PATH
+
 Thread dumps
 ------------
 A directory with _YYYYMMDD-hhmm_ format named with the script invocation time will be created under current directory or under the directory specified with -d option.
