@@ -46,11 +46,11 @@ Dependency
 
 Thread dumps
 ------------
-A directory with _YYYYMMDD-hhmm_ format named with the script invocation time will be created under current directory or under the directory specified with -d option.
+A directory with _YYYYMMDD-hhmmss_ format named with the script invocation time will be created under current directory or under the directory specified with -d option.
 
 Command line of the jvm process which is being jstacked is saved into _cmdline.txt_ file under the above directory
 
-Thread dumps will be saved under the directory with _YYYYMMDD-hhmm.txt_ name formet with _jstack_ invocation time.
+Thread dumps will be saved under the directory with _YYYYMMDD-hhmmss.txt_ name formet with _jstack_ invocation time.
 
 For example:
 <pre>
