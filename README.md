@@ -1,7 +1,7 @@
 Incessant (j)Stack
 ==================
 
-Script which calls _jstack_ on a jvm instance incessantly, saves threaddumps in a directory, supports options to specifiy interval between threaddumps, number of threaddumps to take and keep.  
+Script which calls _jstack_ on a jvm instance incessantly, saves thread dumps in a directory, supports options to specifiy interval between taking thread dumps, number of thread dumps to take and keep.  
 
 Usage
 -----
@@ -82,4 +82,4 @@ Please use the issue tracker associated with this repository.  Please note that 
 
 References
 ----------
-* http://download.oracle.com/javase/1.5.0/docs/tooldocs/share/jstack.html
+* [jstack](http://download.oracle.com/javase/1.5.0/docs/tooldocs/share/jstack.html)
