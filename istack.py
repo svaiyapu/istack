@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -------------------------------------------------------------------------------
-#  Incessant (j)Stack
-#  ------------------
+# Incessant (j)Stack
+# ------------------
 # Script which calls _jstack_ on a jvm instance incessantly, saves thread dumps 
 # in a directory, supports options to specifiy interval between taking thread 
 # dumps, number of thread dumps to take and keep.
 # 
-#  Senthil Vaiyapuri - April 2011
+# Senthil Vaiyapuri - April 2011
 # -------------------------------------------------------------------------------
 from optparse import OptionParser
 from subprocess import call, Popen, PIPE
