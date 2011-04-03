@@ -89,7 +89,7 @@ def manage_dumps(options, out_dir):
             delete -= 1
 
 def run(options, jvm_pid, out_dir):
-    # echo the jvm process command line
+    # save jvm process command line
     try:
         retcode, out, err = get_output(["ps","-o","command","-p", jvm_pid])
     except:
